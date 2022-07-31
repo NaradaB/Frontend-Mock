@@ -3,33 +3,63 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import React from "react";
 import { RecoilRoot, useRecoilState } from "recoil";
-import { facilities } from "../src/states/FacilitiesAtom";
+import {
+  facilities,
+  facilitiesTags,
+  filteredFacilities,
+} from "../src/states/FacilitiesAtom";
+import { activities } from "../src/states/ActivitiesAtom";
 import NavBar from "./components/NavBar";
+import Facilities from "./components/Facilities";
+
+import activitiesCode from "./json/activities.json";
+import facilitiesCode from "./json/facilities.json";
 function App() {
+  //facilities
   const [facilitiesList, setFacilitiesList] = useRecoilState(facilities);
-  const [facilityTags, setFacilityTags] = useState([]);
+  const [facilitiesTagsList, setFacilitiesTags] =
+    useRecoilState(facilitiesTags);
+  const [filteredFacilitiesList, setFilteredFacilities] =
+    useRecoilState(filteredFacilities);
+
+  //activities
+  const [activitiesList, setActivitiesList] = useRecoilState(activities);
 
   useEffect(() => {
+    console.log(facilitiesCode.data);
     axios.get("http://localhost:3002/facilities").then((response) => {
       let responseArray = response.data.data;
       console.log(responseArray);
-
-      responseArray.forEach((facility) => {
-        console.log(facility.tags);
-      });
 
       responseArray.sort((facilityA, facilityB) =>
         facilityA.name > facilityB.name ? 1 : -1
       );
 
+      let tagSet = new Set();
+
+      responseArray.forEach((facility) => {
+        facility.tags.forEach((tag) => {
+          tagSet.add(tag.name);
+        });
+      });
+
+      setFacilitiesTags(Array.from(tagSet).sort());
       setFacilitiesList(responseArray);
+      setFilteredFacilities(responseArray);
+    });
+
+    axios.get("http://localhost:3002/activities").then((response) => {
+      let responseArray = response.data.data;
+      console.log(responseArray);
+      setActivitiesList(responseArray);
     });
   }, []);
 
   return (
     <div className="App">
       {" "}
-      This is a test <NavBar></NavBar>
+      <NavBar></NavBar>
+      <Facilities></Facilities>
     </div>
   );
 }

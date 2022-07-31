@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 .App {
     text-align: center;
+    margin: 0px;
+    width: 100%;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    background-color: #8c59f8
 }

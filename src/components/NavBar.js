@@ -14,7 +14,7 @@ const useStyles = createUseStyles({
     height: "100%",
     fontFamily: "'Josefin Sans', sans-serif",
     fontSize: "1.5rem",
-    color: "#222222",
+    color: "#8c59f8",
     marginLeft: "10rem",
     cursor: "pointer",
     userSelect: "none",

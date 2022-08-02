@@ -1,65 +1,86 @@
 import "./App.css";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import React from "react";
-import { RecoilRoot, useRecoilState } from "recoil";
+import { createUseStyles } from "react-jss";
+import { useRecoilState } from "recoil";
 import {
   facilities,
   facilitiesTags,
   filteredFacilities,
 } from "../src/states/FacilitiesAtom";
-import { activities } from "../src/states/ActivitiesAtom";
+import {
+  activities,
+  activityTags,
+  filteredActivities,
+} from "../src/states/ActivitiesAtom";
+
+//components
 import NavBar from "./components/NavBar";
 import Facilities from "./components/Facilities";
+import Activities from "./components/Activities";
 
-import activitiesCode from "./json/activities.json";
-import facilitiesCode from "./json/facilities.json";
+import activitiesJSON from "./json/activities.json";
+import facilitiesJSON from "./json/facilities.json";
+
+const useStyles = createUseStyles({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+  },
+});
 function App() {
+  const classes = useStyles();
+
   //facilities
-  const [facilitiesList, setFacilitiesList] = useRecoilState(facilities);
-  const [facilitiesTagsList, setFacilitiesTags] =
-    useRecoilState(facilitiesTags);
-  const [filteredFacilitiesList, setFilteredFacilities] =
-    useRecoilState(filteredFacilities);
+  const [, setFacilitiesList] = useRecoilState(facilities);
+  const [, setFacilitiesTags] = useRecoilState(facilitiesTags);
+  const [, setFilteredFacilities] = useRecoilState(filteredFacilities);
 
   //activities
-  const [activitiesList, setActivitiesList] = useRecoilState(activities);
+  const [, setActivitiesList] = useRecoilState(activities);
+  const [, setActivityTags] = useRecoilState(activityTags);
+  const [, setFilteredActivities] = useRecoilState(filteredActivities);
 
   useEffect(() => {
-    console.log(facilitiesCode.data);
-    axios.get("http://localhost:3002/facilities").then((response) => {
-      let responseArray = response.data.data;
-      console.log(responseArray);
+    //facilitiesJSON
+    let facilitiesArray = [...facilitiesJSON.data];
+    facilitiesArray.sort((facilityA, facilityB) =>
+      facilityA.name > facilityB.name ? 1 : -1
+    );
+    let tagSet = new Set();
 
-      responseArray.sort((facilityA, facilityB) =>
-        facilityA.name > facilityB.name ? 1 : -1
-      );
-
-      let tagSet = new Set();
-
-      responseArray.forEach((facility) => {
-        facility.tags.forEach((tag) => {
-          tagSet.add(tag.name);
-        });
+    facilitiesArray.forEach((facility) => {
+      facility.tags.forEach((tag) => {
+        tagSet.add(tag.name);
       });
-
-      setFacilitiesTags(Array.from(tagSet).sort());
-      setFacilitiesList(responseArray);
-      setFilteredFacilities(responseArray);
     });
 
-    axios.get("http://localhost:3002/activities").then((response) => {
-      let responseArray = response.data.data;
-      console.log(responseArray);
-      setActivitiesList(responseArray);
+    setFacilitiesTags(Array.from(tagSet).sort());
+    setFacilitiesList(facilitiesArray);
+    setFilteredFacilities(facilitiesArray);
+
+    //activitiesJSON
+    let activitiesArray = [...activitiesJSON.data];
+    tagSet = new Set();
+
+    activitiesArray.forEach((activity) => {
+      activity.tags.forEach((tag) => {
+        tagSet.add(tag.name);
+      });
     });
+    setActivityTags(Array.from(tagSet).sort());
+    setActivitiesList(activitiesArray);
+    setFilteredActivities(activitiesArray);
   }, []);
 
   return (
     <div className="App">
       {" "}
       <NavBar></NavBar>
-      <Facilities></Facilities>
+      <div className={classes.container}>
+        <Facilities></Facilities>
+        <Activities></Activities>
+      </div>
     </div>
   );
 }

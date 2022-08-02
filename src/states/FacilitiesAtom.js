@@ -12,15 +12,16 @@ export const facilitiesTags = atom({
 
 export const currentFacilityTag = atom({
   key: "currentFacilityTag",
-  default: {},
-});
-
-export const facilitySearch = atom({
-  key: "facilitySearch",
-  default: [],
+  default: "",
 });
 
 export const filteredFacilities = atom({
   key: "filteredFacilities",
   default: [],
+});
+
+//Button
+export const selectedFacility = atom({
+  key: "selectedFacility",
+  default: {},
 });

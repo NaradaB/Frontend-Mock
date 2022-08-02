@@ -3,19 +3,23 @@ import {
   filteredFacilities,
   facilitiesTags,
   currentFacilityTag,
-  facilitySearch,
 } from "../states/FacilitiesAtom";
+import { facilityQuery } from "../states/FuseAtom";
+import Fuse from "fuse.js";
+
 import FacilityButton from "../components/FacilityButton";
 import DropDown from "../components/DropDown";
 import SearchBar from "../components/SearchBar";
-import { RecoilRoot, useRecoilState } from "recoil";
+import ClearButton from "../components/ClearButton";
+
+import { useRecoilState } from "recoil";
 import { useEffect } from "react";
 import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   container: {
     display: "flex",
-    width: "18rem",
+    width: "25rem",
     flexDirection: "column",
     marginTop: "50px",
     marginLeft: "10rem",
@@ -31,17 +35,12 @@ const useStyles = createUseStyles({
     alignItems: "center",
     flexDirection: "column",
   },
-  navLogo: {
-    display: "flex",
-    alignItems: "center",
-    height: "100%",
-    marginLeft: "10px",
-    fontFamily: "'Josefin Sans', sans-serif",
+  title: {
     fontSize: "1.5rem",
-    color: "#222222",
-    marginLeft: "10rem",
-    cursor: "pointer",
-    userSelect: "none",
+    fontFamily: "'Josefin Sans', sans-serif",
+    textAlign: "left",
+    marginLeft: "1rem",
+    color: "#8c59f8",
   },
 });
 
@@ -55,20 +54,50 @@ function Facilities() {
     useRecoilState(facilitiesTags);
   const [facilityTag, setCurrentFacilityTag] =
     useRecoilState(currentFacilityTag);
-  const [facilitySearchField, setFacilitySearchField] =
-    useRecoilState(facilitySearch);
 
+  const [facQuery, setFacilityQuery] = useRecoilState(facilityQuery);
+
+  //Fuzzy search
+  const options = {
+    includeScore: true,
+    threshold: 0.2,
+    keys: ["name", "tags.name"],
+  };
+
+  //When dropdown is changed
   useEffect(() => {
-    console.log(facilityTag);
-    let newArray = facilitiesList.filter(checkTags);
-    console.log(newArray);
-    setFilteredFacilities(newArray);
+    console.log("triggered");
+    setFacilityQuery("");
+    facilityTag.length === 0
+      ? setFilteredFacilities(facilitiesList)
+      : setFilteredFacilities(facilitiesList.filter(checkTags));
   }, [facilityTag]);
 
   useEffect(() => {
-    console.log(facilitySearchField);
-    console.log(facilityTag);
-  }, [facilitySearchField]);
+    if (facQuery.length === 0) {
+      facilityTag.length === 0
+        ? setFilteredFacilities(facilitiesList)
+        : setCurrentFacilityTag(facilityTag);
+      return;
+    }
+
+    let fuse;
+
+    facilityTag.length === 0
+      ? (fuse = new Fuse(facilitiesList, options))
+      : (fuse = new Fuse(facilitiesList.filter(checkTags), options));
+
+    const fuseResult = fuse.search(facQuery);
+
+    setFilteredFacilities([]);
+
+    fuseResult.forEach((result) => {
+      setFilteredFacilities((filteredFacilitiesList) => [
+        ...filteredFacilitiesList,
+        result.item,
+      ]);
+    });
+  }, [facQuery]);
 
   function checkTags(facility) {
     let tags = facility.tags;
@@ -84,17 +113,23 @@ function Facilities() {
 
   return (
     <div className={classes.container}>
+      <div className={classes.title}>Facilities</div>
       <div className={classes.filterWrapper}>
+        <ClearButton setter={setCurrentFacilityTag}></ClearButton>
         <DropDown
           tags={facilitiesTagsList}
           setter={setCurrentFacilityTag}
           currentTag={facilityTag}
         ></DropDown>
-        <SearchBar setter={setFacilitySearchField}></SearchBar>
+        <SearchBar
+          setter={setFacilityQuery}
+          label={"Facility Name"}
+          value={facQuery}
+        ></SearchBar>
       </div>
       <div className={classes.facilitiesWrapper}>
         {filteredFacilitiesList.map((facility) => (
-          <FacilityButton name={facility.name} />
+          <FacilityButton facility={facility} />
         ))}
       </div>
     </div>

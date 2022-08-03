@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="container-0-2-1"
+  data-testid="activity"
+>
+  <div
+    data-testid="activity-name-and-level"
+  >
+    Diving
+     (
+    Experienced
+    )
+  </div>
+  <div
+    className="location-0-2-2"
+    data-testid="activity-location"
+  >
+    Location: 
+    Swimming pool 2
+  </div>
+  <div
+    data-testid="activity-start-end"
+  >
+    9:00
+     - 
+    10:00
+  </div>
+</div>
+`;

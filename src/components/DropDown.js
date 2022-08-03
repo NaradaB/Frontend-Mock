@@ -10,7 +10,7 @@ function DropDown(props) {
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box data-testid="dropdown-1" sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Tag</InputLabel>
         <Select

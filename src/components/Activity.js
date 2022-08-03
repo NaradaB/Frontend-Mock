@@ -2,7 +2,7 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   container: {
-    fontFamily: "'Josefin Sans', sans-serif",
+    fontFamily: "'Roboto', sans-serif",
     fontSize: "1rem",
     color: "#3A3A3A",
     display: "flex",
@@ -19,17 +19,20 @@ const useStyles = createUseStyles({
     borderColor: "#808080",
     marginLeft: "8px",
   },
+  location: { fontSize: "0.8rem" },
 });
 
 function Activity(props) {
   const classes = useStyles();
   return (
-    <div className={classes.container}>
-      <div>
+    <div data-testid="activity" className={classes.container}>
+      <div data-testid="activity-name-and-level">
         {props.activity.name} ({props.activity.level})
       </div>
-      <div>{props.activity.location}</div>
-      <div>
+      <div className={classes.location} data-testid="activity-location">
+        Location: {props.activity.location}
+      </div>
+      <div data-testid="activity-start-end">
         {props.activity.start_time} - {props.activity.end_time}
       </div>
     </div>

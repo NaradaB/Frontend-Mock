@@ -51,6 +51,7 @@ function FacilityButton(props) {
 
   return (
     <Button
+      data-testid="facility-button"
       onClick={() => {
         setSelectedFacility(props.facility);
         setActivityQuery("");

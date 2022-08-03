@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 function ClearButton(props) {
   return (
     <Button
+      data-testid="clear-button"
       onClick={() => {
         props.setter("");
       }}

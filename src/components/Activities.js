@@ -32,7 +32,7 @@ const useStyles = createUseStyles({
     marginBottom: "10px",
   },
   time: {
-    fontFamily: "'Josefin Sans', sans-serif",
+    fontFamily: "'Roboto', sans-serif",
     fontSize: "1rem",
     color: "#808080",
     marginRight: "10px",
@@ -40,7 +40,7 @@ const useStyles = createUseStyles({
   },
   title: {
     fontSize: "1.5rem",
-    fontFamily: "'Josefin Sans', sans-serif",
+    fontFamily: "'Roboto', sans-serif",
     textAlign: "left",
     marginLeft: "1rem",
     color: "#8c59f8",

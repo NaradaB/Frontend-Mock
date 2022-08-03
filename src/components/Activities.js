@@ -1,12 +1,10 @@
 import { useRecoilState } from "recoil";
 import { selectedFacility } from "../states/FacilitiesAtom";
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import { createUseStyles } from "react-jss";
 import {
   filteredActivities,
   activityTags,
-  activities,
   currentActivities,
   currentActivityTag,
 } from "../states/ActivitiesAtom";
@@ -54,7 +52,6 @@ function Activities() {
   const classes = useStyles();
 
   const [facility] = useRecoilState(selectedFacility);
-  const [activitiesList] = useRecoilState(activities);
   const [searchedActivities, setSearchedActivities] =
     useRecoilState(filteredActivities);
   const [currActivities] = useRecoilState(currentActivities);
@@ -78,6 +75,7 @@ function Activities() {
 
   useEffect(() => {
     sortActivities(currActivities);
+    // eslint-disable-next-line
   }, [facility]);
 
   useEffect(() => {
@@ -90,11 +88,10 @@ function Activities() {
 
     let fuse;
 
-    if (activityTag.length === 0) {
-      fuse = new Fuse(currActivities, options);
-    } else {
-      fuse = new Fuse(tagResults, options);
-    }
+    activityTag.length === 0
+      ? (fuse = new Fuse(currActivities, options))
+      : (fuse = new Fuse(tagResults, options));
+
     const fuseResult = fuse.search(actQuery);
 
     setSearchedActivities([]);
@@ -105,16 +102,22 @@ function Activities() {
         result.item,
       ]);
     });
+    // eslint-disable-next-line
   }, [actQuery]);
 
   useEffect(() => {
     if (!(actQuery.length === 0)) {
       sortActivities(searchedActivities);
     }
+    // eslint-disable-next-line
   }, [searchedActivities]);
 
   //When dropdown is changed
   useEffect(() => {
+    //When dropdown is changed whilst search is not empty
+    if (actQuery.length !== 0) {
+      setActivityQuery("");
+    }
     //When it's not empty
     if (!(activityTag.length === 0)) {
       let newArray = currActivities.filter(checkTags);
@@ -124,6 +127,7 @@ function Activities() {
       //When dropdown clear is clicked
       sortActivities(currActivities);
     }
+    // eslint-disable-next-line
   }, [activityTag]);
 
   function checkTags(activity) {
@@ -191,16 +195,16 @@ function Activities() {
         ></SearchBar>
       </div>
       {uniqueTimes.map((time) => (
-        <div className={classes.row}>
+        <div key={time} className={classes.row}>
           <div className={classes.time}>{time}</div>
           {returnActivities(time).map((activity) => (
-            <Activity activity={activity}></Activity>
+            <Activity key={activity.id} activity={activity}></Activity>
           ))}
         </div>
       ))}
     </div>
   ) : (
-    <div></div>
+    <></>
   );
 }
 

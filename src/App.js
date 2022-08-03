@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import React from "react";
 import { createUseStyles } from "react-jss";
 import { useRecoilState } from "recoil";
@@ -71,11 +71,11 @@ function App() {
     setActivityTags(Array.from(tagSet).sort());
     setActivitiesList(activitiesArray);
     setFilteredActivities(activitiesArray);
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div className="App">
-      {" "}
       <NavBar></NavBar>
       <div className={classes.container}>
         <Facilities></Facilities>

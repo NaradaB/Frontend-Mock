@@ -47,11 +47,10 @@ const useStyles = createUseStyles({
 function Facilities() {
   const classes = useStyles();
 
-  const [facilitiesList, setFacilitiesList] = useRecoilState(facilities);
+  const [facilitiesList] = useRecoilState(facilities);
   const [filteredFacilitiesList, setFilteredFacilities] =
     useRecoilState(filteredFacilities);
-  const [facilitiesTagsList, setFacilitiesTags] =
-    useRecoilState(facilitiesTags);
+  const [facilitiesTagsList] = useRecoilState(facilitiesTags);
   const [facilityTag, setCurrentFacilityTag] =
     useRecoilState(currentFacilityTag);
 
@@ -66,11 +65,11 @@ function Facilities() {
 
   //When dropdown is changed
   useEffect(() => {
-    console.log("triggered");
     setFacilityQuery("");
     facilityTag.length === 0
       ? setFilteredFacilities(facilitiesList)
       : setFilteredFacilities(facilitiesList.filter(checkTags));
+    // eslint-disable-next-line
   }, [facilityTag]);
 
   useEffect(() => {
@@ -97,6 +96,7 @@ function Facilities() {
         result.item,
       ]);
     });
+    // eslint-disable-next-line
   }, [facQuery]);
 
   function checkTags(facility) {
@@ -129,7 +129,7 @@ function Facilities() {
       </div>
       <div className={classes.facilitiesWrapper}>
         {filteredFacilitiesList.map((facility) => (
-          <FacilityButton facility={facility} />
+          <FacilityButton key={facility.id} facility={facility} />
         ))}
       </div>
     </div>

@@ -21,10 +21,11 @@ const useStyles = createUseStyles({
 
 function FacilityButton(props) {
   const classes = useStyles();
+
   const [, setSelectedFacility] = useRecoilState(selectedFacility);
+
   const [allActivities] = useRecoilState(activities);
   const [, setCurrentActivities] = useRecoilState(currentActivities);
-
   const [, setCurrentActivityTag] = useRecoilState(currentActivityTag);
   const [, setActivityQuery] = useRecoilState(activityQuery);
 

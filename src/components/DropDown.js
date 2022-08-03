@@ -3,7 +3,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { facilitiesTags } from "../states/FacilitiesAtom";
 
 function DropDown(props) {
   const handleChange = (event) => {
@@ -22,7 +21,9 @@ function DropDown(props) {
           onChange={handleChange}
         >
           {props.tags.map((tag) => (
-            <MenuItem value={tag}>{tag}</MenuItem>
+            <MenuItem key={tag} value={tag}>
+              {tag}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

@@ -6,7 +6,6 @@ const useStyles = createUseStyles({
     width: "100%",
     height: "80px",
     margin: "0",
-    // boxShadow: "0px 2px #666666",
   },
   navLogo: {
     display: "flex",

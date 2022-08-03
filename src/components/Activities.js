@@ -51,19 +51,17 @@ const useStyles = createUseStyles({
 function Activities() {
   const classes = useStyles();
 
+  const [timeTable, setTimeTable] = useState();
+  const [uniqueTimes, setUniqueTimes] = useState();
+  const [tagResults, setTagResults] = useState([]);
+
   const [facility] = useRecoilState(selectedFacility);
   const [searchedActivities, setSearchedActivities] =
     useRecoilState(filteredActivities);
   const [currActivities] = useRecoilState(currentActivities);
-  const [timeTable, setTimeTable] = useState();
-  const [uniqueTimes, setUniqueTimes] = useState();
   const [activityTag, setCurrentActivityTag] =
     useRecoilState(currentActivityTag);
   const [activityTagsList] = useRecoilState(activityTags);
-
-  //After applying tag
-  const [tagResults, setTagResults] = useState([]);
-
   const [actQuery, setActivityQuery] = useRecoilState(activityQuery);
 
   //Fuzzy search
@@ -75,7 +73,6 @@ function Activities() {
 
   useEffect(() => {
     sortActivities(currActivities);
-    // eslint-disable-next-line
   }, [facility]);
 
   useEffect(() => {
@@ -102,14 +99,12 @@ function Activities() {
         result.item,
       ]);
     });
-    // eslint-disable-next-line
   }, [actQuery]);
 
   useEffect(() => {
     if (!(actQuery.length === 0)) {
       sortActivities(searchedActivities);
     }
-    // eslint-disable-next-line
   }, [searchedActivities]);
 
   //When dropdown is changed
@@ -127,22 +122,14 @@ function Activities() {
       //When dropdown clear is clicked
       sortActivities(currActivities);
     }
-    // eslint-disable-next-line
   }, [activityTag]);
 
-  function checkTags(activity) {
-    let tags = activity.tags;
-    let contains = false;
-    tags.forEach((tag) => {
-      if (tag.name === activityTag) {
-        contains = true;
-      }
-    });
+  //Check if an activity contains the tag from dropdown
+  const checkTags = (activity) =>
+    activity.tags.some((tag) => tag.name === activityTag);
 
-    return contains;
-  }
-
-  function sortActivities(array) {
+  //Used to sort activities by starting time
+  const sortActivities = (array) => {
     let tempArray = [...array];
 
     tempArray.sort(function (a, b) {
@@ -167,44 +154,41 @@ function Activities() {
 
     setTimeTable(activitiesMap);
     setUniqueTimes(Array.from(times));
-  }
+  };
 
-  function returnActivities(time) {
-    return timeTable.get(time);
-  }
+  //Return activities that start a given time
+  const returnActivities = (time) => timeTable.get(time);
 
   //To fix the issue with no leading zeroes
-  function fixTime(time) {
-    return time.length !== 5 ? "0" + time : time;
-  }
+  const fixTime = (time) => (time.length !== 5 ? "0" + time : time);
 
-  return uniqueTimes ? (
-    <div className={classes.container}>
-      <div className={classes.title}>Activities</div>
-      <div className={classes.filterWrapper}>
-        <ClearButton setter={setCurrentActivityTag}></ClearButton>
-        <DropDown
-          tags={activityTagsList}
-          setter={setCurrentActivityTag}
-          currentTag={activityTag}
-        ></DropDown>
-        <SearchBar
-          value={actQuery}
-          setter={setActivityQuery}
-          label={"Activity"}
-        ></SearchBar>
-      </div>
-      {uniqueTimes.map((time) => (
-        <div key={time} className={classes.row}>
-          <div className={classes.time}>{time}</div>
-          {returnActivities(time).map((activity) => (
-            <Activity key={activity.id} activity={activity}></Activity>
-          ))}
+  return (
+    uniqueTimes && (
+      <div className={classes.container}>
+        <div className={classes.title}>Activities</div>
+        <div className={classes.filterWrapper}>
+          <ClearButton setter={setCurrentActivityTag}></ClearButton>
+          <DropDown
+            tags={activityTagsList}
+            setter={setCurrentActivityTag}
+            currentTag={activityTag}
+          ></DropDown>
+          <SearchBar
+            value={actQuery}
+            setter={setActivityQuery}
+            label={"Activity"}
+          ></SearchBar>
         </div>
-      ))}
-    </div>
-  ) : (
-    <></>
+        {uniqueTimes.map((time) => (
+          <div key={time} className={classes.row}>
+            <div className={classes.time}>{time}</div>
+            {returnActivities(time).map((activity) => (
+              <Activity key={activity.id} activity={activity}></Activity>
+            ))}
+          </div>
+        ))}
+      </div>
+    )
   );
 }
 

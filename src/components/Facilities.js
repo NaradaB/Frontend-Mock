@@ -69,7 +69,6 @@ function Facilities() {
     facilityTag.length === 0
       ? setFilteredFacilities(facilitiesList)
       : setFilteredFacilities(facilitiesList.filter(checkTags));
-    // eslint-disable-next-line
   }, [facilityTag]);
 
   useEffect(() => {
@@ -96,20 +95,10 @@ function Facilities() {
         result.item,
       ]);
     });
-    // eslint-disable-next-line
   }, [facQuery]);
 
-  function checkTags(facility) {
-    let tags = facility.tags;
-    let contains = false;
-    tags.forEach((tag) => {
-      if (tag.name === facilityTag) {
-        contains = true;
-      }
-    });
-
-    return contains;
-  }
+  const checkTags = (facility) =>
+    facility.tags.some((tag) => tag.name === facilityTag);
 
   return (
     <div className={classes.container}>

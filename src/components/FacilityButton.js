@@ -29,7 +29,7 @@ function FacilityButton(props) {
   const [, setCurrentActivityTag] = useRecoilState(currentActivityTag);
   const [, setActivityQuery] = useRecoilState(activityQuery);
 
-  function filterByFacility() {
+  const filterByFacility = () => {
     setCurrentActivityTag("");
     setCurrentActivities([]);
     allActivities.forEach((activity) => {
@@ -37,17 +37,9 @@ function FacilityButton(props) {
         setCurrentActivities((currActivities) => [...currActivities, activity]);
       }
     });
-  }
+  };
 
-  function returnTags(tagArray) {
-    let string = "";
-
-    tagArray.forEach((tag) => {
-      string += tag.name + " • ";
-    });
-
-    return string.slice(0, -2);
-  }
+  const returnTags = (tagArray) => tagArray.map((tag) => tag.name).join(" • ");
 
   return (
     <Button

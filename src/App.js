@@ -71,7 +71,6 @@ function App() {
     setActivityTags(Array.from(tagSet).sort());
     setActivitiesList(activitiesArray);
     setFilteredActivities(activitiesArray);
-    // eslint-disable-next-line
   }, []);
 
   return (

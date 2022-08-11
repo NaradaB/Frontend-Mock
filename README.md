@@ -1,5 +1,5 @@
 
-# Showlog
+# Frontend Mock
 ![enter image description here](https://i.imgur.com/mcJf0Tu.gif)
 ## Setup
 - Download files

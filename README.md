@@ -1,5 +1,5 @@
 
-# Frontend Mock
+# Frontend Mock with testing using Jest
 ![enter image description here](https://i.imgur.com/mcJf0Tu.gif)
 ## Setup
 - Download files

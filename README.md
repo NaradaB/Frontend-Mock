@@ -7,6 +7,11 @@
 - `npm start` to run the server
 - Navigate to http://localhost:3000/ to view
 
+## Features
+- Recoil for state management
+- Fuzzy search
+- Jest for testing
+
 ## Usage
 - Select a Facility from the left hand side
 - View Activities on the right hand side
